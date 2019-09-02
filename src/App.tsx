@@ -11,11 +11,13 @@ import { PrivateRoute } from './components/app/PrivateRoute';
 
 import AppHeader from './components/app/AppHeader';
 import HomePage from './pages/HomePage';
+import AddPage from './pages/AddPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 
 import './App.css';
 import SettingsPage from './pages/SettingsPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 
 export default class App extends Component<any, any> {
   constructor(props: any) {
@@ -49,6 +51,19 @@ export default class App extends Component<any, any> {
                   render={(routeProps) => (
                     <RegisterPage {...routeProps} state={this.state} actions={this.props.actions} />
                   )}
+                />
+                <Route
+                  path="/privacypolicy"
+                  render={(routeProps) => (
+                    <PrivacyPolicyPage {...routeProps} state={this.state} actions={this.props.actions} />
+                  )}
+                />
+                <PrivateRoute
+                  path="/add"
+                  component={AddPage}
+                  isAuthenticated={this.state.isAuthenticated}
+                  state={this.state} 
+                  actions={this.props.actions}
                 />
                 <PrivateRoute
                   path="/settings"

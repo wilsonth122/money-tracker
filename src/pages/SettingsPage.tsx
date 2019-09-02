@@ -13,6 +13,10 @@ export default class SettingsPage extends Component<any, any> {
         }
     }
 
+    viewPrivacyPolicy = () => {
+        this.props.history.push('/privacypolicy');
+    }
+
     showWarning = () => {
         this.setState({
           showWarning: true
@@ -45,6 +49,9 @@ export default class SettingsPage extends Component<any, any> {
                             ) : ( 
                                 "Delete Account" 
                             )}
+                        </IonButton>
+                        <IonButton expand="block" fill="clear" onClick={this.viewPrivacyPolicy}>
+                                View Privacy Policy
                         </IonButton>
 
                         <IonAlert
