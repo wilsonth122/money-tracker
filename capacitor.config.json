@@ -1,0 +1,7 @@
+{
+  "appId": "com.github.wilsonth122",
+  "appName": "Money Tracker",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "build"
+}
