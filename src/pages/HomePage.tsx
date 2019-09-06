@@ -46,10 +46,14 @@ export default class HomePage extends Component<any, any> {
                     message={'Please check your internet connection.'}
                     backdropDismiss={false}
                     buttons={[
-                    {
-                        text: 'Retry',
-                        handler: this.props.actions.loadExpenses
-                    }
+                        {
+                            text: 'Logout',
+                            handler: this.props.actions.logoutUser
+                        },
+                        {
+                            text: 'Retry',
+                            handler: this.props.actions.loadExpenses
+                        }                    
                     ]}
                 />
             </IonContent>
