@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Expense } from './types';
-import { tokenHeader } from '../../utils/cookieUtils';
+import { tokenHeader } from '../../storage/storageUtils';
 
 const expensesUrl: string = process.env.REACT_APP_EXPENSES_URL || "";
 

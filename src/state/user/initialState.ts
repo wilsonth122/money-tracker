@@ -1,15 +1,13 @@
 import { User } from "./types";
-import Cookies from 'universal-cookie';
-
-const cookies = new Cookies();
+import { getUsername, getToken } from "../../storage/storageUtils";
 
 export const initialState = () => ({
     user: {
-        email: cookies.get('user') || "",
+        email: getUsername() || "",
         password: ""
     } as User,
     loginError: "",
     deleteError: false,
     deleteMessage: "",
-    isAuthenticated: cookies.get('token') ? true : false
+    isAuthenticated: getToken() ? true : false
 })

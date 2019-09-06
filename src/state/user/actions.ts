@@ -1,7 +1,7 @@
 import { User } from "./types";
 import { loginUser, createUser, deleteUser } from "./api";
 import { appState } from "../appState";
-import { deleteUserDetails, storeUserDetails } from "../../utils/cookieUtils";
+import { deleteUserDetails, storeUserDetails } from "../../storage/storageUtils";
 
 export const actions = (update: any) => ({
   loginUser: (user: User) => update((state: any) => {

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { User } from './types'
-import { tokenHeader } from '../../utils/cookieUtils';
+import { tokenHeader } from '../../storage/storageUtils';
 
 const userUrl: string = process.env.REACT_APP_USER_URL || "";
 
