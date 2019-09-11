@@ -1,0 +1,4 @@
+#Tue Sep 03 12:21:56 BST 2019
+base.0=C\:\\code\\react\\money-tracker\\android\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\4
+path.0=classes.dex
+renamed.0=classes.dex
