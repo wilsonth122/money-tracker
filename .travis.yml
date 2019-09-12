@@ -1,0 +1,20 @@
+language: node_js
+node_js:
+  - 10
+cache:
+  directories:
+    - node_modules
+script:
+  - npm run build
+  - npm test
+env:
+  global:
+  - secure: eoj9IJ7owwsQJ0K0ex8zMIaQuqUDCEd9GbJZa5JrAJSBvdSXI/qbxNM9MjbPEHgawhHvXZ7X0zAudSFI7n/GHMRe+RzQ+QOt8lA64phA8Ymh9gbNK14Jx47OOLKP7ac0UvT79BxXbcLyE466WxhoWQmu5vivKhgMV+xsFJaaSkSq+MeUU81+6LZfYkhTHneYqJpA5kdmpoaW1RyLNt7IFLXc0CET79YGfu3gfsCqX5cPA89nxuYamHK5+VKpYU6Ic/xnseY+8CJd+kZjCeqLyq1xD8aSh7rCCecbKPSHhBPlzk0PSyWHPfDTIXdgDR1seKGXMfcO14hI3pp1EukfpEVuQImcv50Wc08E/uBezyTSKMutko3z9hZd0MtkVTRPLxgHd+Nfk7svUwY8Hdgyq2ZGoZlHBp5RaP/zKrZ6T92O58SVuMqwnVpY3lffGW/Y5hRKz7XX4kJXXuQMQxAXGfRxaov0eWdpSAUor/UlP3pUpCpaPg7bRKb4xMqhoIFp2SXBIgsajJAh9BxvVi9B3iIL5rYKJEi259KdBpnnGKq6zKgS9F/1bMdAVJzh0HawJghcsceWqpUedvjewHEjP41J6MQf7GYd7mW4Dkhep7KFDU7UVMb1jBeSxEVMpeOqs33ESfnSVNaMya3HA/dZpU7cFwzkJ76F5pAWHFrnHeQ=
+before_install:
+- echo $gae_file_password | gpg --batch --yes --passphrase-fd 0 client-secret.json.gpg
+deploy:
+  provider: gae
+  keyfile: client-secret.json
+  project: money-tracker-249719
+  config: app.yaml
+  skip_cleanup: true
