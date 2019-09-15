@@ -1,13 +1,13 @@
-import { Expense, TotalByDate } from './types'
+import { Expense } from './types'
 import { appState } from '../appState';
-import { calculateTotalByDate, getWeeksExpenses, getMonthsExpenses, getYearsExpenses, getTotal } from '../../utils/expenseStats';
-import { loadExpenses } from './api';
+import { updateStateFromNewExpenses } from '../../utils/expenseStats';
+import { loadExpenses, streamExpenses, stopStreamingExpenses } from './api';
 
 export const actions = (update: any) => ({
   loadExpenses: () => update((state: any) => {
     loadExpenses(
-      appState.actions(update).updateExpenseList, 
-      appState.actions(update).loadFailed
+      appState.actions(update).createExpenseList, 
+      appState.actions(update).createFailed
     );
 
     return {
@@ -16,48 +16,80 @@ export const actions = (update: any) => ({
       loadFailed: false
     }
   }),
-  
-  updateExpenseList: (newExpenses: Expense[]) => update((state: any) => {
-    let expenses: Expense[] = [];
-    let totalByDate: TotalByDate[] = [];
-    let weeksExpenses: TotalByDate[] = [];
-    let monthsExpenses: TotalByDate[] = [];
-    let yearsExpenses: TotalByDate[] = [];
-    
-    if (newExpenses) {
-      expenses = [...newExpenses];
 
-      expenses.sort((t1: Expense, t2: Expense) => {
-        const a = new Date(t1.date);
-        const b = new Date(t2.date);
-
-        return +b - +a;
-    });
-
-      totalByDate = calculateTotalByDate(expenses);
-      weeksExpenses = getWeeksExpenses(totalByDate);
-      monthsExpenses = getMonthsExpenses(totalByDate);
-      yearsExpenses = getYearsExpenses(totalByDate);
-    }
+  streamExpenses: () => update((state: any) => {
+    streamExpenses(
+      appState.actions(update).updateExpenseList,
+      appState.actions(update).updateFailed
+    );
 
     return {
       ...state,
-      loadingExpenses: false,
-      expenses: expenses,
-      weeksExpenses: weeksExpenses,
-      monthsExpenses: monthsExpenses, 
-      yearsExpenses: yearsExpenses,
-      weeksTotal: getTotal(weeksExpenses),
-      monthsTotal: getTotal(monthsExpenses),
-      yearsTotal: getTotal(yearsExpenses)
+      loadingStream: true,
+      streamingFailed: false
     }
   }),
 
-  loadFailed: () => update((state: any) => {
+  stopStreamingExpenses: () => update((state: any) => {
+    stopStreamingExpenses();
+
+    return {
+      ...state
+    }
+  }),
+  
+  createExpenseList: (newExpenses: Expense[]) => update((state: any) => {
+    let newState = updateStateFromNewExpenses(newExpenses, state);
+
+    // Start streaming upon load
+    appState.actions(update).streamExpenses();
+
+    return {
+      ...newState,
+      loadingExpenses: false
+    }
+  }),
+
+  createFailed: () => update((state: any) => {
     return {
       ...state,
       loadingExpenses: false,
       loadFailed: true
     }
-  })
+  }),
+
+  updateExpenseList: (data: any) => update((state: any) => {
+    try {
+      let expense: Expense = JSON.parse(data);
+      let expenses: Expense[] = [...state.expenses];
+      let index = expenses.findIndex(el => el.id === expense.id);
+
+      if(index !== -1) {
+        expenses[index] = expense;
+      }
+      else {
+        expenses.push(expense);
+      }
+
+      let newState = updateStateFromNewExpenses(expenses, state);
+
+      return {
+        ...newState
+      }
+    } catch(e) {
+      // Ignore any data that isn't an expense
+      return {
+        ...state,
+        loadingStream: false
+      }
+    }
+  }),
+
+  updateFailed: (error: Error) => update((state: any) => {
+    return {
+      ...state,
+      streamingFailed: true,
+      loadingStream: false
+    }
+  }),
 })
