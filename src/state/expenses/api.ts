@@ -1,8 +1,33 @@
 import axios from 'axios';
 import { Expense } from './types';
-import { tokenHeader } from '../../utils/cookieUtils';
+import { tokenHeader, tokenAsJSON } from '../../utils/cookieUtils';
 
 const expensesUrl: string = process.env.REACT_APP_EXPENSES_URL || "";
+const websocketExpensesUrl: string = "ws://localhost:8080/api/stream/expenses";
+let ws: WebSocket;
+
+// streamExpenses uses websockets to get any expenses which are created or updated
+export function streamExpenses(onUpdate: Function, onError: Function) {
+    if(ws) { 
+        stopStreamingExpenses()
+    }
+    
+    ws = new WebSocket(websocketExpensesUrl);
+
+    // Once connection is open, send auth token to authenticate user
+    ws.onopen = (ev: Event) => { ws.send(JSON.stringify(tokenAsJSON())) }
+    ws.onmessage = (ev: MessageEvent) => { onUpdate(ev.data) }
+    ws.onerror = (ev: Event) => { onError(ev) }
+    ws.onclose = (ev: CloseEvent) => { onError("Connection closed unexpectedly") }
+}
+
+export function stopStreamingExpenses() {
+    ws.onopen = () => {}
+    ws.onmessage = () => {}
+    ws.onerror = () => {}
+    ws.onclose = () => {}
+    ws.close();
+}
 
 export function loadExpenses(onSuccess: Function, onError: Function) {
     let header = tokenHeader();

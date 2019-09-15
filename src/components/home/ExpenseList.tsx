@@ -8,7 +8,8 @@ import {
   IonIcon,
   IonNote,
   IonListHeader,
-  IonSpinner
+  IonSpinner,
+  IonButton
 } from '@ionic/react';
 import { Expense } from '../../state/expenses/types';
 import { getIcon } from '../../utils/iconDictionary';
@@ -60,6 +61,22 @@ export default class ExpensesList extends Component<any, any> {
       if(this.props.expenses.length > 0) {
         return (
           <IonList>
+            { (this.props.streamingFailed || this.props.loadingStream) &&
+              <IonButton 
+                fill="clear"
+                expand="block"
+                size="small"
+                color="danger"
+                style={{margin: "0 12px"}}
+                onClick={this.props.streamingReconnect}
+              >
+                  {this.props.loadingStream ? (
+                    <IonSpinner color="danger"/>
+                  ) : (
+                    "Auto update has stopped, click to retry"
+                  )}
+              </IonButton>
+            }
             {this.renderRows(this.props.expenses)}
           </IonList>
         )

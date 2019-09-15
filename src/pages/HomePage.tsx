@@ -25,6 +25,10 @@ export default class HomePage extends Component<any, any> {
         this.props.actions.loadExpenses();
     }
 
+    componentWillUnmount() {
+		this.props.actions.stopStreamingExpenses();
+	}
+
     render() {
         return (
             <IonContent>
@@ -35,7 +39,11 @@ export default class HomePage extends Component<any, any> {
                 <ExpenseList 
                     expenses={this.props.state.expenses}
                     viewExpense={this.view} 
-                    appLoading={this.props.state.loadingExpenses} />
+                    appLoading={this.props.state.loadingExpenses}
+                    streamingFailed={this.props.state.streamingFailed}
+                    loadingStream={this.props.state.loadingStream}
+                    streamingReconnect={this.props.actions.streamExpenses}
+                />
                     
                 <AddFab icon="add" onClick={this.add} appLoading={this.props.state.loadingExpenses} />
 

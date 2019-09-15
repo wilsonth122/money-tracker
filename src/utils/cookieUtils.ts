@@ -8,6 +8,12 @@ export function tokenHeader() {
     return { headers: {Authorization: `Bearer ${token}`} }
 }
 
+export function tokenAsJSON() {
+    let token = cookies.get('token')
+
+    return { token: token }
+}
+
 export function storeUserDetails(data: any) {
     cookies.remove('user')
     cookies.remove('token')

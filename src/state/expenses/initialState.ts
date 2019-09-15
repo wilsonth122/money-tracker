@@ -5,6 +5,8 @@ const date = new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), 
 export const initialState = () => ({
     loadingExpenses: false,
     loadFailed: false,
+    loadingStream: false,
+    streamingFailed: false,
     expenses: [] as Expense[],
     weeksExpenses: [] as TotalByDate[],
     monthsExpenses: [] as TotalByDate[],
